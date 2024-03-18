@@ -15,21 +15,33 @@ import loguru
 
 def scrape_data_point():
     """
-    Scrapes the main headline from The Daily Pennsylvanian home page.
+    Scrapes all of the Opinion pieces from the first page of the Opinions section
 
     Returns:
-        str: The headline text if found, otherwise an empty string.
+        list: The titles of the Opinion pieces
     """
-    req = requests.get("https://www.thedp.com")
+    req = requests.get("https://www.thedp.com/section/opinion")
     loguru.logger.info(f"Request URL: {req.url}")
     loguru.logger.info(f"Request status code: {req.status_code}")
 
+    # array for article names 
+
+    article_names = []
+
     if req.ok:
         soup = bs4.BeautifulSoup(req.text, "html.parser")
-        target_element = soup.find("a", class_="frontpage-link")
-        data_point = "" if target_element is None else target_element.text
-        loguru.logger.info(f"Data point: {data_point}")
-        return data_point
+
+        #use find_all to get all the article names
+
+        target_elements = soup.find_all("a", class_="section-article")
+
+        #iterate through all them
+
+        for target_element in target_elements:
+            article_names.append(target_element.text.strip())
+            loguru.logger.info(f"Article name: {target_element.text.strip()}")
+
+    return article_names
 
 
 if __name__ == "__main__":
