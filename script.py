@@ -31,15 +31,16 @@ def scrape_data_point():
     if req.ok:
         soup = bs4.BeautifulSoup(req.text, "html.parser")
 
-        #use find_all to get all the article names
+        #use find_all to get all the articles
 
-        target_elements = soup.find_all("a", class_="section-article")
+        target_elements = soup.find_all("div", class_="section-article")
 
-        #iterate through all them
+        #iterate through all them to get title
 
         for target_element in target_elements:
-            article_names.append(target_element.text.strip())
-            loguru.logger.info(f"Article name: {target_element.text.strip()}")
+            title = target_element.find("a")
+            article_names.append(title.text.strip())
+            loguru.logger.info(f"Article name: {title.text.strip()}")
 
     return article_names
 
