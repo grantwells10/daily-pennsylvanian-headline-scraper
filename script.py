@@ -33,7 +33,7 @@ def scrape_data_point():
 
         #use find_all to get all the articles
 
-        target_elements = soup.find_all("div", class_="section-article")
+        target_elements = soup.find_all("h3", class_="standard-link")
 
         #iterate through all them to get title
 
